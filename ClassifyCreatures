@@ -1,0 +1,31 @@
+import numpy as np # linear algebra
+import pandas as pd # data processing, CSV file I/O (e.g. pd.read_csv)
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+from sklearn.model_selection import train_test_split
+from sklearn.tree import DecisionTreeClassifier
+df = pd.read_csv('train_ghosts.csv')
+df.head()
+
+X = df.drop(columns=['type'])
+y = df['type']
+
+from sklearn.model_selection import train_test_split
+random_state=0
+X_train, X_test, y_train, y_test = train_test_split(X,y, test_size=0.2, random_state=0)
+
+from sklearn.tree import DecisionTreeClassifier
+dt = DecisionTreeClassifier(random_state=0)
+
+dt.fit(X_train,y_train)
+
+y_pred=dt.predict(X_test)
+
+# Assuming you have columns 'true_labels' for true labels and 'predicted_labels' for predicted labels
+true_labels = y_test
+predicted_labels = y_pred
+
+# Calculate accuracy
+accuracy = (true_labels == predicted_labels).mean()
+print("Accuracy:", accuracy)
