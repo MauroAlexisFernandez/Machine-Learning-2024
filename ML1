@@ -1,0 +1,36 @@
+#Demostration of hypothesis space complexity using a classification problem
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.datasets import make_classification
+from sklearn.linear_model import LogisticRegression
+from sklearn.preprocessing import PolynomialFeatures
+from sklearn.pipeline import make_pipeline
+
+# Generate a synthetic dataset for binary classification
+X, y = make_classification(n_samples=100, n_features=1, n_informative=1, n_redundant=0, n_clusters_per_class=1, random_state=42)
+
+# Simple Hypothesis Space (Linear)
+model_simple = LogisticRegression()
+model_simple.fit(X, y)
+
+# Complex Hypothesis Space (Polynomial)
+model_complex = make_pipeline(PolynomialFeatures(10), LogisticRegression())
+model_complex.fit(X, y)
+
+# Generate a range of X values for plotting
+X_plot = np.linspace(X.min(), X.max(), 300).reshape(-1, 1)
+
+# Predictions
+y_pred_simple = model_simple.predict_proba(X_plot)[:, 1]
+y_pred_complex = model_complex.predict_proba(X_plot)[:, 1]
+
+# Plot the data and decision boundaries
+plt.figure(figsize=(10, 6))
+plt.scatter(X, y, color='blue', label='Data')
+plt.plot(X_plot, y_pred_simple, color='green', label='Simple Hypothesis (Linear)')
+plt.plot(X_plot, y_pred_complex, color='red', label='Complex Hypothesis (Polynomial)')
+plt.xlabel('X')
+plt.ylabel('y')
+plt.legend()
+plt.title('Simple vs. Complex Hypothesis Space for Classification')
+plt.show()
